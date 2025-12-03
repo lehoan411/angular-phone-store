@@ -1,0 +1,48 @@
+<div class="wrapper-cart">
+  <h1>Register</h1>
+  <div style="width: 30%; margin: auto; background: #fff; padding: 1rem; border-radius: 8px;" [formGroup]="register">
+    <div class="form-control">
+      <label for="username">Username:</label>
+      <div><input type="text" id="username" formControlName="username" /></div>
+    </div>
+    @if (username?.dirty || username?.touched) {
+    @if (username?.hasError('required')) {
+    <div style="color: red;">
+      Username is required
+    </div>
+    }
+    }
+    <div class="form-control">
+      <label for="email">Email:</label>
+      <div><input type="text" id="email" formControlName="email" /></div>
+    </div>
+    @if (email?.dirty || email?.touched) {
+    @if (email?.hasError('required')) {
+    <div style="color: red;">
+      Email is required
+    </div>
+    }
+    }
+
+    <div class="form-control">
+      <label for="password">Password:</label>
+      <div><input type="password" id="password" formControlName="password" /></div>
+    </div>
+    @if (password?.dirty || password?.touched) {
+    @if (password?.hasError('required')) {
+    <div style="color: red;">
+      Password is required
+    </div>
+    }
+    }
+    <div class="form-control">
+      <div class="btn-navigation" (click)="handleRegister()" style="padding: 0.8rem; color: #fff; margin-top: .4rem;">
+        Register
+      </div>
+    </div>
+
+  </div>
+  
+
+
+</div>

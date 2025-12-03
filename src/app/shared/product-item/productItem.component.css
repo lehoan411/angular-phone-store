@@ -1,0 +1,85 @@
+.group-card {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  width: 20%;
+  height: 100%;
+  margin: 1rem 1rem;
+  vertical-align: top;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.image-card {
+  border-radius: 5px 5px 0 0;
+  border-bottom: 1px solid #ccc;
+  width: 100%;
+  height: 300px;
+}
+
+.card-container {
+  border-radius: 5px;
+  background-color: #d888eb;
+  padding: 1rem;
+}
+
+.card-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;  
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.add-to-cart {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-detail  {
+    background-image: linear-gradient(to right, #d4c734, #8029fc);
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    color: lightgray;
+}
+
+.btn-cart {
+  background-image: linear-gradient(to right, #34d484, #8029fc);
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+
+@media (max-width: 1200px) {
+  .card {
+    width: 25%;
+  }  
+   .btn-detail, .btn-cart {
+    padding: 0.4rem;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    width: 45%;
+    margin: 1rem 0.5rem;
+  }  
+}
+

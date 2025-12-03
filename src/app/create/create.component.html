@@ -1,0 +1,47 @@
+<div class="wrapper-cart">
+  <h1>Create Product</h1>
+  <div style="width: 70%; margin: auto; background: #fff; padding: 1rem; border-radius: 8px;" [formGroup]="product">
+    <div class="form-control">
+      <label for="name">Name:</label>
+      <div><input type="text" id="name" formControlName="name" /></div>
+    </div>
+    @if (name?.dirty || name?.touched) {
+    @if (name?.hasError('required')) {
+    <div style="color: red;">
+      Name is required
+    </div>
+    }
+    }
+
+
+    <div class="form-control">
+      <label for="price">Price:</label>
+      <div><input type="text" id="price" formControlName="price" /></div>
+    </div>
+    @if (price?.dirty || price?.touched) {
+    @if (price?.hasError('required')) {
+    <div style="color: red;">
+      Price is required
+    </div>
+    }
+    }
+
+    <div class="form-control">
+      <label for="image">Image Link:</label>
+      <div><input type="text" id="image" formControlName="image" /></div>
+    </div>
+    @if (image?.dirty || image?.touched) {
+    @if (image?.hasError('required')) {
+    <div style="color: red;">
+      Image is required
+    </div>
+    }
+    }
+    <div class="form-control">
+      <div class="btn-navigation" (click)="handleAddCart()" style="padding: 0.8rem; color: #fff; margin-top: .4rem;">
+        Add to cart
+      </div>
+    </div>
+  </div>
+
+</div>

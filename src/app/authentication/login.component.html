@@ -1,0 +1,34 @@
+<div class="wrapper-cart">
+  <h1>Login</h1>
+  <div style="width: 30%; margin: auto; background: #fff; padding: 1rem; border-radius: 8px;" [formGroup]="login">
+    <div class="form-control">
+      <label for="username">Username:</label>
+      <div><input type="text" id="username" formControlName="username" /></div>
+    </div>
+    @if (username?.dirty || username?.touched) {
+    @if (username?.hasError('required')) {
+    <div style="color: red;">
+      Username is required
+    </div>
+    }
+    }
+    <div class="form-control">
+      <label for="password">Password:</label>
+      <div><input type="text" id="password" formControlName="password" /></div>
+    </div>
+    @if (password?.dirty || password?.touched) {
+    @if (password?.hasError('required')) {
+    <div style="color: red;">
+      Password is required
+    </div>
+    }
+    }
+
+    <div class="form-control">
+      <div class="btn-navigation" (click)="handleLogin()" style="padding: 0.8rem; color: #fff; margin-top: .4rem;">
+        Login
+      </div>
+    </div>
+  
+  </div>
+</div>

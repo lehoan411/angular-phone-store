@@ -1,0 +1,16 @@
+<div class="wrapper-cart">
+  <h1>Detail Product</h1>
+  <div class="detail-content" style="padding: 0 3rem; color: #fff;">
+    <div  style="margin: 1rem;">
+      <img  class="img-detail" src="{{productItem.image}}" alt="Nine">
+    </div>
+    <div class="product-info">
+      <h3>Name Product: {{productItem.name | upperCasePipe }}</h3>
+      <h4>Price Product: {{productItem.price | currencyPipe }}</h4>
+      <div class="btn-add-to-cart" (click)="handleAddToCart()" style="padding: 0.8rem; color: #fff; margin-top: .4rem;">
+        Add to cart
+      </div>
+    </div>
+
+  </div>
+</div>

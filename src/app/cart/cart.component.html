@@ -1,0 +1,39 @@
+<div class="wrapper-cart">
+  <div class="container-cart">
+    <h1>Shopping Cart</h1>
+
+    <div class="group-cart">
+      <div class="header-cart">
+        <div class="col-1">Image</div>
+        <div class="col-2">Name</div>
+        <div class="col-3">Price</div>
+        <div class="col-4">Action</div>
+      </div>
+
+      <div class="body-cart">
+        @for (item of cartItems; track $index) {
+        <div class="row-cart">
+          <div class="col-1">
+            <img width="50" src="{{ item.product.image }}" />
+          </div>
+
+          <div class="col-2">
+            {{ item.product.name | upperCasePipe }}
+          </div>
+
+          <div class="col-3">
+            {{ item.product.price | currencyPipe }}
+          </div>
+
+          <div class="col-4">
+            <div class="btn-main" (click)="handleDelete(item.id)">Delete</div>
+          </div>
+        </div>
+        }
+
+        <div>Total Price: {{ totalPrice | currencyPipe }}</div>
+      </div>
+    </div>
+  </div>
+
+</div>

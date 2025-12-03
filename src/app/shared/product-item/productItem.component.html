@@ -1,0 +1,17 @@
+<div class="group-card">
+    @for (product of products; track product.id) {
+    <div class="card">
+      <div class="card-container">
+        <a href="/detail/{{product.id}}">
+          <img class="image-card" src="{{ product.image }}" alt="Product 1" />
+        </a>
+        <div class="card-name">{{ product.name| upperCasePipe }}</div>
+        <div class="card-price">{{ product.price| currencyPipe }}</div>
+        <div class="add-to-cart">
+          <a href="/detail/{{product.id}}" class="btn-detail">View Detail</a>
+          <a (click)="handleAddToCart(product)" class="btn-cart">Add to cart</a>
+        </div>
+      </div>
+    </div>
+    }
+</div>
