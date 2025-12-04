@@ -6,6 +6,7 @@ import { UserService } from '../../services/UserService';
 import { CurrencyPipe } from '../shared/pipes/CurencyPipe.pipe';
 import { UpperCasePipe } from '../shared/pipes/UpperCasePipe.pipe';
 import { FormsModule } from '@angular/forms';
+import { LocalStorageService } from '../shared/storage/local-storage.service';
 
 @Component({
   selector: 'home-root',
@@ -27,7 +28,8 @@ export class CartComponent implements OnInit, OnDestroy {
   constructor(
     private productService: ProductService,
     private cartService: CartService,
-    private userService: UserService
+    private userService: UserService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit(): void {
@@ -36,10 +38,15 @@ export class CartComponent implements OnInit, OnDestroy {
       this.productService.getProducts(),
       this.cartService.getCarts()
     ]).subscribe(([users, products, carts]) => {
-
-      this.cartItems = carts.map((cart: any) => {
-        const user = users.find(u => String(u.id) === String(cart.user));
-        const product = products.find(p => String(p.id) === String(cart.product));
+      const userData = this.localStorageService.getItem('user');
+      let currentUserId = null;
+      if (userData) {
+        const user = JSON.parse(userData);
+        currentUserId = user.id;
+      }
+      this.cartItems = carts.filter(cart => cart.user === currentUserId).map(cart => {
+        const user = users.find(u => u.id.toString() === cart.user);
+        const product = products.find(p => p.id === cart.product);
 
         return {
           id: cart.id,
@@ -48,7 +55,6 @@ export class CartComponent implements OnInit, OnDestroy {
         };
       });
 
-      console.log("Cart Items:", this.cartItems);
     });
   }
 

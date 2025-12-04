@@ -3,7 +3,10 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 import { User } from '../shared/type/user';
 import { UserService } from '../../services/UserService';
-import { LocalStorageService } from '../shared/local-storage/local-storage.service';
+import { LocalStorageService } from '../shared/storage/local-storage.service';
+
+
+
 
 
 
@@ -38,10 +41,20 @@ export class LoginComponent {
     }
      this.userService.getUsers().subscribe((res: any) => {
       const matchedUser = res.find((u: User) => u.username === user.username && u.password === user.password);
+      if (!matchedUser) {
+        alert('Invalid username or password');
+        return;
+      }
       console.log(matchedUser);
       if (matchedUser) {
-        this.localStorageService.setItem('user', matchedUser.id);
+        this.localStorageService.setItem('user', JSON.stringify({
+          id: matchedUser.id,
+          role: matchedUser.role
+        }));
         this.router.navigate(['/']);
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
       }
     });
   }

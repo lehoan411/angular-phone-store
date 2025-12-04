@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card-container">
         <a href="/detail/{{product.id}}">
-          <img class="image-card" src="{{ product.image }}" alt="Product 1" />
+          <img class="image-card" src="{{ product.image }}" alt="{{ product.name }}" />
         </a>
         <div class="card-name">{{ product.name| upperCasePipe }}</div>
         <div class="card-price">{{ product.price| currencyPipe }}</div>

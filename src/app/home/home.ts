@@ -1,4 +1,4 @@
-import { Component, DoCheck, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, DoCheck, OnDestroy, OnInit, signal, } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { ProductItem } from '../shared/type/productItem';
 import { ProductItemComponent } from '../shared/product-item/productItem.component';
@@ -15,6 +15,8 @@ import { map, Subscription } from 'rxjs';
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
+
+
 export class Home implements OnInit, OnDestroy {
 
   isVisible = true
@@ -51,9 +53,19 @@ export class Home implements OnInit, OnDestroy {
   }
 
   handleAddToCart = (product: ProductItem) => {
+    const userData = localStorage.getItem('user');
+    if (!userData) {
+      alert('Please log in to add items to your cart.');
+      return;
+    }
+    let currentUserId = null;
+    if (userData) {
+      const user = JSON.parse(userData);
+      currentUserId = user.id;
+    }
     const cartItem = {
-      id: Math.random(),
-      user: 1,
+      id: String(Math.random()),
+      user: currentUserId,
       product: product.id
     }
     this.cartService.addToCart(cartItem).subscribe((res: any) => {
@@ -62,6 +74,7 @@ export class Home implements OnInit, OnDestroy {
       }
     })
   }
+
   // handleChangeVisible = () => {
   //   this.isVisible = false
   // }

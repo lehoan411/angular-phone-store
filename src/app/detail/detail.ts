@@ -5,7 +5,7 @@ import { ProductService } from '../../services/ProductService';
 import { CartService } from '../../services/CartService';
 import { CurrencyPipe } from '../shared/pipes/CurencyPipe.pipe';
 import { UpperCasePipe } from '../shared/pipes/UpperCasePipe.pipe';
-
+import { LocalStorageService } from '../shared/storage/local-storage.service';
 
 
 @Component({
@@ -18,12 +18,13 @@ templateUrl: './detail.html',
 export class Detail implements OnInit{
   id = '';
   productItem: ProductItem = {
-    id: 0,
+    id: '',
+    user: '',
     image: '',
     name: '',
     price: 0,
   }
-  constructor(private route: ActivatedRoute, private productService: ProductService, private cartService: CartService) {}
+  constructor(private route: ActivatedRoute, private productService: ProductService, private cartService: CartService, private localStorage: LocalStorageService) {}
 
   ngOnInit(): void {
     this.getRoute(this.route.snapshot.params['id']);
@@ -37,9 +38,14 @@ export class Detail implements OnInit{
   }
 
   handleAddToCart(){
+    const userData = this.localStorage.getItem('user');
+    if (!userData) {
+      alert('Please log in to add items to your cart.');
+      return;
+    }
     const cartItem = {
-      id: Math.random(),
-      user: 1,
+      id: String(Math.random()),
+      user: JSON.parse(userData).id.toString(),
       product: this.productItem.id
     }
     this.cartService.addToCart(cartItem).subscribe((res: any) => {

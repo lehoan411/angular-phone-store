@@ -1,47 +1,119 @@
 <div class="wrapper-cart">
-  <h1>Create Product</h1>
-  <div style="width: 70%; margin: auto; background: #fff; padding: 1rem; border-radius: 8px;" [formGroup]="product">
-    <div class="form-control">
-      <label for="name">Name:</label>
-      <div><input type="text" id="name" formControlName="name" /></div>
-    </div>
-    @if (name?.dirty || name?.touched) {
-    @if (name?.hasError('required')) {
-    <div style="color: red;">
-      Name is required
-    </div>
-    }
-    }
+  <div class="list-product">
+    <h3 style="font-size: 36px; color: #fff; margin: 2rem; text-align: center;">Product List</h3>
+    <div class="btn-open" (click)="openModal()">+ Create Product</div>
+    <div class="group-cart">
+      <div class="header-cart">
+        <div class="col-1">Image</div>
+        <div class="col-2">Name</div>
+        <div class="col-3">Price</div>
+        <div class="col-4">Action</div>
+      </div>
 
+      <div class="body-cart">
+        @for (item of productList; track $index) {
 
-    <div class="form-control">
-      <label for="price">Price:</label>
-      <div><input type="text" id="price" formControlName="price" /></div>
-    </div>
-    @if (price?.dirty || price?.touched) {
-    @if (price?.hasError('required')) {
-    <div style="color: red;">
-      Price is required
-    </div>
-    }
-    }
+        <div class="row-cart">
 
-    <div class="form-control">
-      <label for="image">Image Link:</label>
-      <div><input type="text" id="image" formControlName="image" /></div>
-    </div>
-    @if (image?.dirty || image?.touched) {
-    @if (image?.hasError('required')) {
-    <div style="color: red;">
-      Image is required
-    </div>
-    }
-    }
-    <div class="form-control">
-      <div class="btn-navigation" (click)="handleAddCart()" style="padding: 0.8rem; color: #fff; margin-top: .4rem;">
-        Add to cart
+          <div class="col-1">
+            @if (editId === item.id) {
+            <input type="text" [(ngModel)]="editData.image" class="inline-input" />
+            } @else {
+            <img width="50" src="{{ item.image }}" />
+            }
+          </div>
+
+          <div class="col-2">
+            @if (editId === item.id) {
+            <input type="text" [(ngModel)]="editData.name" class="inline-input" />
+            } @else {
+            {{ item.name | upperCasePipe }}
+            }
+          </div>
+
+          <div class="col-3">
+            @if (editId === item.id) {
+            <input type="text" [(ngModel)]="editData.price" class="inline-input" />
+            } @else {
+            {{ item.price | currencyPipe }}
+            }
+          </div>
+
+          <div class="col-4">
+
+            @if (editId === item.id) {
+            <div class="btn-save" (click)="handleEdit(item.id)">
+              ✔
+            </div>
+
+            <div class="btn-cancel" (click)="cancelInlineEdit()">
+              ✖
+            </div>
+
+            } @else {
+
+            <div class="btn-edit" (click)="startInlineEdit(item)">
+              ✎
+            </div>
+
+            <div class="btn-delete" (click)="handleDelete(item.id)">
+              🗑
+            </div>
+
+            }
+
+          </div>
+        </div>
+
+        }
       </div>
     </div>
   </div>
 
+  @if ( isOpen ) {
+  <div class="modal-backdrop">
+    <div class="modal">
+      <h2>Create Product</h2>
+
+      <form [formGroup]="product">
+
+        <div class="form-control">
+          <label>Name:</label>
+          <input type="text" formControlName="name" />
+          @if ( name?.touched && name?.hasError('required')) {
+          <div class="error">
+            Name is required
+          </div>
+          }
+        </div>
+
+        <div class="form-control">
+          <label>Price:</label>
+          <input type="text" formControlName="price" />
+          @if ( price?.touched && price?.hasError('required')) {
+          <div class="error">
+            Price is required
+          </div>
+          }
+
+        </div>
+
+        <div class="form-control">
+          <label>Image Link:</label>
+          <input type="text" formControlName="image" />
+          @if ( image?.touched && image?.hasError('required')) {
+          <div class="error">
+            Image is required
+          </div>
+          }
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn-cancel" (click)="closeModal()" type="button">Cancel</button>
+          <button class="btn-create" (click)="handleAddCart()" type="button">Create</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  }
 </div>

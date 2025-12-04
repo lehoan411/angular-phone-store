@@ -9,13 +9,16 @@ export class ProductService {
     getProducts(): Observable<ProductItem[]> {
         return this.http.get<any>('http://localhost:9999/products').pipe();
     }
-    detailProduct(id: number): Observable<ProductItem> {
+    detailProduct(id: string): Observable<ProductItem> {
         return this.http.get<any>(`http://localhost:9999/products/${id}`).pipe()
     }
     postProduct(productItem: ProductItem): Observable<ProductItem> {
         return this.http.post<any>(`http://localhost:9999/products`, productItem).pipe()
     }
-    deleteProduct(id: number): Observable<ProductItem> {
+    editProduct(productItem: ProductItem): Observable<ProductItem> {
+        return this.http.put<any>(`http://localhost:9999/products/${productItem.id}`, productItem).pipe()
+    }
+    deleteProduct(id: string): Observable<ProductItem> {
         return this.http.delete<any>(`http://localhost:9999/products/${id}`).pipe()
     }
 }
