@@ -28,23 +28,11 @@
             </svg>
         </a>
     </div>
+
+    
     <div class="group-navigation">
-
-        @if (isLoggedIn) {
-         @if (role !== 'admin') {
-        <a class="btn-navigation" href="/cart"><img
-                src="https://www.citypng.com/public/uploads/preview/hd-shopping-cart-white-logo-icon-transparent-png-701751694973936amdcratijm.png"
-                alt="shopping" width="20px" height="20px"></a>
-        
-        } @else if (role === 'admin') {
-        <a class="btn-navigation" href="/admin/manage-product">Manage</a>
-        } 
-        
-
-        <a class="btn-navigation" (click)="handleLogout()">Logout</a>
-        } @else if (!isLoggedIn) {
-        <a class="btn-navigation" href="/login">Login</a>
-        <a class="btn-navigation" href="/register">Register</a>
-        }
+        <a routerLink="/" class="nav-item">Home</a>
+        <a routerLink="/" class="nav-item">About</a>
+        <a routerLink="/" class="nav-item">Contact</a>
     </div>
 </div>

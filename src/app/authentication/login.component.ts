@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, Resolve,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot } from '@angular/router';
 import { User } from '../shared/type/user';
 import { UserService } from '../../services/UserService';
 import { LocalStorageService } from '../shared/storage/local-storage.service';
@@ -32,6 +34,7 @@ export class LoginComponent {
   }
   constructor(private localStorageService: LocalStorageService, private userService: UserService, private router: Router) {
   }
+   
 
   handleLogin() {
     if (this.username?.hasError('required') || this.password?.hasError('required')) return;
@@ -51,10 +54,16 @@ export class LoginComponent {
           id: matchedUser.id,
           role: matchedUser.role
         }));
-        this.router.navigate(['/']);
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
+        if (matchedUser.status !== 'active') {
+          alert('Your account is not active. Please contact admin.');
+          return;
+        }
+        const role = matchedUser.role;
+        if (role === 'admin') {
+          window.location.href = '/admin/manage-product';
+        } else {
+          window.location.href = '/';
+        }
       }
     });
   }

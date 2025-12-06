@@ -1,21 +1,21 @@
 import { Component, inject } from '@angular/core';
 import { Injectable } from '@angular/core';
 import { LocalStorageService } from '../storage/local-storage.service';
-import { UserService } from './../../../services/UserService';
+import { UserService } from '../../../services/UserService';
 import { Router, RouterLink } from '@angular/router';
 
 @Injectable({
     providedIn: 'root',
 })
 @Component({
-    selector: 'header-layout',
+    selector: 'footer-layout',
     standalone: true,
-    templateUrl: './header-layout.component.html',
-    styleUrls: ['./header-layout.component.css'],
+    templateUrl: './footer-layout.component.html',
+    styleUrls: ['./footer-layout.component.css'],
     imports: [RouterLink]
 })
 
-export class HeaderLayoutComponent {
+export class FooterLayoutComponent {
     role ='';
     constructor( private localStorage: LocalStorageService, private userService: UserService, private router: Router) { }
     ngOnInit(): void {

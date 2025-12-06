@@ -34,15 +34,16 @@ export class RegisterComponent {
   handleRegister() {
     if(this.username?.hasError('required') || this.email?.hasError('required') || this.password?.hasError('required')) return;
      const user: User = {
-      id: Math.random(),
+      id: Math.random().toString(36).substring(2, 9),
       username: String(this.username?.value),
       email: String(this.email?.value),
       password: String(this.password?.value),
-      role: 'user'
+      role: 'user',
+      status: 'active'
     }
     this.userService.register(user).subscribe((res: any)=> {
       if (res.id) {
-        this.router.navigate(['/login']);
+        window.location.href = '/login';
       }
     });
   }

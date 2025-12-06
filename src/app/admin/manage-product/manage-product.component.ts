@@ -1,23 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductService } from '../../services/ProductService';
-import { UserService } from '../../services/UserService';
+import { ProductService } from '../../../services/ProductService';
+import { UserService } from '../../../services/UserService';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ProductItem } from '../shared/type/productItem';
-import { Router } from '@angular/router';
-import { CurrencyPipe } from '../shared/pipes/CurencyPipe.pipe';
-import { UpperCasePipe } from '../shared/pipes/UpperCasePipe.pipe';
-import { LocalStorageService } from '../shared/storage/local-storage.service';
+import { ProductItem } from '../../shared/type/productItem';
+import { Router, RouterOutlet } from '@angular/router';
+import { CurrencyPipe } from '../../shared/pipes/CurencyPipe.pipe';
+import { UpperCasePipe } from '../../shared/pipes/UpperCasePipe.pipe';
+import { LocalStorageService } from '../../shared/storage/local-storage.service';
 import { FormsModule } from '@angular/forms';
 
 
 @Component({
-  selector: 'create-root',
+  selector: 'manage-product-root',
   standalone: true,
-  imports: [ReactiveFormsModule, CurrencyPipe, UpperCasePipe, FormsModule],
-  templateUrl: './create.component.html',
-  styleUrls: ['./create.component.css', '../app.css']
+  imports: [ReactiveFormsModule, CurrencyPipe, UpperCasePipe, FormsModule, RouterOutlet],
+  templateUrl: './manage-product.component.html',
+  styleUrls: ['./manage-product.component.css',]
 })
-export class CreateComponent implements OnInit {
+export class ManageProductComponent implements OnInit {
 
   product = new FormGroup({
     name: new FormControl('', Validators.required),

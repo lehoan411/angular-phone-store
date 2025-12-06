@@ -18,8 +18,9 @@
 
 .image-card {
   border-radius: 5px 5px 0 0;
-  border-bottom: 1px solid #ccc;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   width: 100%;
+  object-fit: cover;
   height: 300px;
 }
 

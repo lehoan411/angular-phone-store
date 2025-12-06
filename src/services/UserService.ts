@@ -9,8 +9,14 @@ export class UserService {
     getUsers(): Observable<User[]> {
         return this.http.get<any>('http://localhost:9999/users').pipe()
     }
-    getUserById(id: number): Observable<User> {
+    getUserById(id: string): Observable<User> {
         return this.http.get<any>(`http://localhost:9999/users/${id}`).pipe()
+    }
+    editUser(user: User): Observable<User> {
+        return this.http.put<any>(`http://localhost:9999/users/${user.id}`, user).pipe()
+    }
+    banUser(id: string): Observable<User> {
+        return this.http.put<any>(`http://localhost:9999/users/${id}/ban`, {}).pipe()
     }
     register(user: User): Observable<User> {
         return this.http.post<any>(`http://localhost:9999/users`, user).pipe()

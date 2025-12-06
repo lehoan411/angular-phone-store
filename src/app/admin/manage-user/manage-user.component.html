@@ -1,0 +1,43 @@
+
+  <div class="list-product">
+    <h3 style="font-size: 36px; color: #fff; margin: 2rem; text-align: center;">User List</h3>
+    <div class="group-cart">
+      <div class="header-cart">
+        <div class="col-1">No.</div>
+        <div class="col-2">Username</div>
+        <div class="col-3">Email</div>
+        <div class="col-4">Status</div>
+        <div class="col-5">Action</div>
+      </div>
+
+      <div class="body-cart">
+        @for (item of userList; track $index) {
+
+        <div class="row-cart">
+
+          <div class="col-1">
+            {{ $index + 1 }}
+          </div>
+
+          <div class="col-2">
+            {{ item.username }}
+          </div>
+
+          <div class="col-3">
+            {{ item.email }}
+          </div>
+          <div [ngStyle]="{'color': item.status === 'banned' ? 'red' : 'green'}" class="col-4">
+            {{ item.status }}
+          </div>
+
+          <div class="col-5">
+            <div class="btn-edit" (click)="handleBanUser(item.id)">
+              🛠
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+
