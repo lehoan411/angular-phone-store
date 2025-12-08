@@ -1,6 +1,6 @@
 <div class="group-header">
     <div class="header-logo">
-        <a href="/">
+        <a style="cursor: pointer;" (click)="routerAdmin()">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 982 239" fill="none" class="angular-logo">
                 <g clip-path="url(#a)">
                     <path fill="url(#b)"
@@ -29,6 +29,8 @@
         </a>
     </div>
     <div class="group-navigation">
+
+        <a class="btn-navigation" href="/donation">Donate</a>
 
         @if (isLoggedIn) {
          @if (role !== 'admin') {

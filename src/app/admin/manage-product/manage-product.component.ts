@@ -3,7 +3,7 @@ import { ProductService } from '../../../services/ProductService';
 import { UserService } from '../../../services/UserService';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProductItem } from '../../shared/type/productItem';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router } from '@angular/router';
 import { CurrencyPipe } from '../../shared/pipes/CurencyPipe.pipe';
 import { UpperCasePipe } from '../../shared/pipes/UpperCasePipe.pipe';
 import { LocalStorageService } from '../../shared/storage/local-storage.service';
@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'manage-product-root',
   standalone: true,
-  imports: [ReactiveFormsModule, CurrencyPipe, UpperCasePipe, FormsModule, RouterOutlet],
+  imports: [ReactiveFormsModule, CurrencyPipe, UpperCasePipe, FormsModule,],
   templateUrl: './manage-product.component.html',
   styleUrls: ['./manage-product.component.css',]
 })
@@ -68,7 +68,7 @@ export class ManageProductComponent implements OnInit {
 
   handleAddCart() {
     if (this.name?.hasError('required') || this.price?.hasError('required') || this.image?.hasError('required')) return;
-    const userData = this.localStorageService.getItem('user');
+    const userData = this.localStorageService.getItem('token');
     console.log(userData);
     if (!userData) {
       alert('Please log in to create a product.');
@@ -76,7 +76,7 @@ export class ManageProductComponent implements OnInit {
     }
     const productItem: ProductItem = {
       id: Math.random().toString(),
-      user: JSON.parse(userData).id,
+      user: JSON.parse(atob(userData)).id,
       name: String(this.name?.value),
       price: Number(this.price?.value),
       image: String(this.image?.value)
@@ -94,10 +94,10 @@ export class ManageProductComponent implements OnInit {
 
 
   ngOnInit(): void {
-    const currentUser = this.localStorageService.getItem('user');
-    let user = { id: null, role: '' };
+    const currentUser = this.localStorageService.getItem('token');
+    let user: any = {};
     if (currentUser) {
-      user = JSON.parse(currentUser);
+      user = JSON.parse(atob(currentUser));
     }
 
     this.productService.getProducts().subscribe((res: any) => {
@@ -107,7 +107,7 @@ export class ManageProductComponent implements OnInit {
 
 
   handleEdit(id: string) {
-    const userData = this.localStorageService.getItem('user');
+    const userData = this.localStorageService.getItem('token');
     console.log(userData);
     if (!userData) {
       alert('Please log in to create a product.');
@@ -116,7 +116,7 @@ export class ManageProductComponent implements OnInit {
 
     const updatedProduct: ProductItem = {
       id: id.toString(),
-      user: JSON.parse(userData).id,
+      user: JSON.parse(atob(userData)).id,
       name: this.editData.name,
       price: Number(this.editData.price),
       image: this.editData.image
@@ -135,10 +135,14 @@ export class ManageProductComponent implements OnInit {
   }
 
   handleDelete(id: string) {
-    this.productService.deleteProduct(id).subscribe(() => {
-      this.productList = this.productList.filter(item => item.id !== id);
-      alert('Product deleted successfully!');
-      window.location.reload();
-    });
+    if (confirm('Are you sure you want to delete this product?') == true) {
+      this.productService.deleteProduct(id).subscribe(() => {
+        this.productList = this.productList.filter(item => item.id !== id);
+        alert('Product deleted successfully!');
+        window.location.reload();
+      });
+    } else {
+      return;
+    }
   }
 }

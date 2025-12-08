@@ -1,0 +1,28 @@
+<div class="wrapper-cart">
+  <h1>Donate</h1>
+  <div style="width: 30%; margin: auto; background: #fff; padding: 1rem; border-radius: 8px;" [formGroup]="donation">
+    <div class="form-control">
+      <label for="amount">Amount:</label>
+      <div><input type="text" id="amount" formControlName="amount" /></div>
+    </div>
+    @if (amount?.dirty || amount?.touched) {
+    @if (amount?.hasError('required')) {
+    <div style="color: red;">
+      amount is required
+    </div>
+    }
+    }
+    <div class="form-control">
+      <label for="message">Message:</label>
+      <div><input type="text" id="message" formControlName="message" /></div>
+    </div>
+
+
+    <div class="form-control">
+      <div class="btn-navigation" (click)="handleDonate()" style="padding: 0.8rem; color: #fff; margin-top: .4rem;">
+        Donate
+      </div>
+    </div>
+  
+  </div>
+</div>

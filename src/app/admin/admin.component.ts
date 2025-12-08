@@ -1,14 +1,14 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { ManageUserComponent } from './manage-user/manage-user.component';
-import { ManageProductComponent } from './manage-product/manage-product.component';
+import { ChangeDetectionStrategy, Component,  } from '@angular/core';
+import { RouterOutlet, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'admin-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, RouterModule, CommonModule],
   templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.css']
+  styleUrls: ['./admin.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminComponent {
   

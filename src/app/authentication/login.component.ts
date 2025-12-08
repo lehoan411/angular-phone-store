@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, Resolve,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot } from '@angular/router';
+import { Router } from '@angular/router';
 import { User } from '../shared/type/user';
 import { UserService } from '../../services/UserService';
 import { LocalStorageService } from '../shared/storage/local-storage.service';
@@ -37,34 +35,47 @@ export class LoginComponent {
    
 
   handleLogin() {
-    if (this.username?.hasError('required') || this.password?.hasError('required')) return;
-    const user = {
-      username: String(this.username?.value),
-      password: String(this.password?.value),
+  if (this.login.invalid) return;
+
+  const username = this.username?.value;
+  const password = this.password?.value;
+
+  this.userService.getUsers().subscribe((res: any) => {
+    const matchedUser = res.find((u: User) =>
+      u.username === username && u.password === password
+    );
+
+    if (!matchedUser) {
+      alert('Invalid username or password');
+      return;
     }
-     this.userService.getUsers().subscribe((res: any) => {
-      const matchedUser = res.find((u: User) => u.username === user.username && u.password === user.password);
-      if (!matchedUser) {
-        alert('Invalid username or password');
-        return;
-      }
-      console.log(matchedUser);
-      if (matchedUser) {
-        this.localStorageService.setItem('user', JSON.stringify({
-          id: matchedUser.id,
-          role: matchedUser.role
-        }));
-        if (matchedUser.status !== 'active') {
-          alert('Your account is not active. Please contact admin.');
-          return;
-        }
-        const role = matchedUser.role;
-        if (role === 'admin') {
-          window.location.href = '/admin/manage-product';
-        } else {
-          window.location.href = '/';
-        }
-      }
-    });
-  }
+
+    
+    const fakeToken = btoa(
+      JSON.stringify({
+        id: matchedUser.id,
+        username: matchedUser.username,
+        email: matchedUser.email,
+        role: matchedUser.role,
+        status: matchedUser.status
+      })
+    );
+
+    
+    this.localStorageService.setItem('token', fakeToken);
+
+    
+    if (matchedUser.status !== 'active') {
+      alert('Your account is not active. Please contact admin.');
+      return;
+    }
+
+   
+    if (matchedUser.role === 'admin') {
+      window.location.href = '/admin/manage-user';
+    } else {
+      window.location.href = '/';
+    }
+  });
+}
 }

@@ -11,7 +11,7 @@ import { map, Subscription } from 'rxjs';
 @Component({
   selector: 'home-root',
   standalone: true,
-  imports: [RouterOutlet, ProductItemComponent],
+  imports: [ProductItemComponent],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
@@ -53,14 +53,17 @@ export class Home implements OnInit, OnDestroy {
   }
 
   handleAddToCart = (product: ProductItem) => {
-    const userData = localStorage.getItem('user');
+    const userData = localStorage.getItem('token');
     if (!userData) {
       alert('Please log in to add items to your cart.');
+      return;
+    } else if (userData && JSON.parse(atob(userData)).role === 'admin') {
+      window.location.href = '/admin/manage-product';
       return;
     }
     let currentUserId = null;
     if (userData) {
-      const user = JSON.parse(userData);
+      const user = JSON.parse(atob(userData));
       currentUserId = user.id;
     }
     const cartItem = {

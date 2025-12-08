@@ -12,29 +12,43 @@ import { Router, RouterLink } from '@angular/router';
     standalone: true,
     templateUrl: './header-layout.component.html',
     styleUrls: ['./header-layout.component.css'],
-    imports: [RouterLink]
+    imports: []
 })
 
 export class HeaderLayoutComponent {
-    role ='';
-    constructor( private localStorage: LocalStorageService, private userService: UserService, private router: Router) { }
+    role = '';
+    constructor(private localStorage: LocalStorageService) { }
     ngOnInit(): void {
-        const userData = this.localStorage.getItem('user');        if (userData) {
-            const user = JSON.parse(userData);
+        const userData = this.localStorage.getItem('token');
+        if (userData) {
+            const user = JSON.parse(atob(userData));
+            console.log(user);
             this.role = user.role;
         } else {
             this.role = '';
         }
     }
-   
 
     get isLoggedIn() {
-        return Boolean(this.localStorage.getItem('user'));
+        return Boolean(this.localStorage.getItem('token'));
     }
 
     handleLogout() {
-        this.localStorage.removeItem('user');
-        window.location.href = '/';
+        if(this.role === 'admin') {
+            this.localStorage.removeItem('token');
+            window.location.href = '/login';
+        } else {
+            this.localStorage.removeItem('token');
+            window.location.href = '/';
+        }
+    }
+
+    routerAdmin() {
+        if (this.role === 'admin') {
+            window.location.href = '/admin/manage-user';
+        } else {
+            window.location.href = '/';
+        }
     }
 
 

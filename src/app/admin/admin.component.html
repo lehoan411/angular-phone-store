@@ -3,21 +3,23 @@
   <div style="border-top: 1px solid white; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); margin-bottom: 20px;"></div>
 
   <div class="container">
-    
+
 
     <div class="side-bar">
-      <a href="/admin/manage-user"  class="btn-navigation">
+      <a class="btn-navigation" routerLink="/admin/manage-user" routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }">
         Manage Users
       </a>
 
-      <a href="/admin/manage-product"  class="btn-navigation">
+      <a class="btn-navigation" routerLink="/admin/manage-product" routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }">
         Manage Products
       </a>
     </div>
 
-    
+
     <div class="content-area">
-        <router-outlet></router-outlet>
+      <router-outlet></router-outlet>
     </div>
 
   </div>

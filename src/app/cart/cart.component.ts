@@ -38,10 +38,10 @@ export class CartComponent implements OnInit, OnDestroy {
       this.productService.getProducts(),
       this.cartService.getCarts()
     ]).subscribe(([users, products, carts]) => {
-      const userData = this.localStorageService.getItem('user');
+      const userData = this.localStorageService.getItem('token');
       let currentUserId = null;
       if (userData) {
-        const user = JSON.parse(userData);
+        const user = JSON.parse(atob(userData));
         currentUserId = user.id;
       }
       this.cartItems = carts.filter(cart => cart.user === currentUserId).map(cart => {

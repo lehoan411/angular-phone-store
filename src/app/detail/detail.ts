@@ -11,7 +11,7 @@ import { LocalStorageService } from '../shared/storage/local-storage.service';
 @Component({
   selector: 'detail-root',
   standalone: true,
-  imports: [RouterOutlet, UpperCasePipe, CurrencyPipe],
+  imports: [UpperCasePipe, CurrencyPipe],
 templateUrl: './detail.html',
   styleUrl: './detail.css'
 })
@@ -38,14 +38,17 @@ export class Detail implements OnInit{
   }
 
   handleAddToCart(){
-    const userData = this.localStorage.getItem('user');
+    const userData = this.localStorage.getItem('token');
     if (!userData) {
       alert('Please log in to add items to your cart.');
+      return;
+    } else if (userData && JSON.parse(atob(userData)).role === 'admin') {
+       window.location.href = '/admin/manage-product';
       return;
     }
     const cartItem = {
       id: String(Math.random()),
-      user: JSON.parse(userData).id.toString(),
+      user: JSON.parse(atob(userData)).id.toString(),
       product: this.productItem.id
     }
     this.cartService.addToCart(cartItem).subscribe((res: any) => {

@@ -36,10 +36,11 @@
 }
 
 
-.btn-navigation:checked {
-    background: #007bff;
+.btn-navigation.active {
+    background: #241f2a;
+    transform: scale(1.03);
+    border-left: 5px solid #fff;
 }
-
 
 .content-area {
     flex: 1;

@@ -1,5 +1,19 @@
-<div class="group-card">
-    @for (product of products; track product.id) {
+<div class="title-product">
+  <div class="filter-container">
+    <input type="text" placeholder="Tìm theo tên hoặc giá..." [(ngModel)]="searchText" (input)="applyFilters()" />
+
+
+    <select [(ngModel)]="sortOption" (change)="applyFilters()">
+      <option value="">-- Sắp xếp --</option>
+      <option value="name-asc">Tên A → Z</option>
+      <option value="name-desc">Tên Z → A</option>
+      <option value="price-asc">Giá tăng dần</option>
+      <option value="price-desc">Giá giảm dần</option>
+    </select>
+
+  </div>
+  <div class="group-card">
+    @for (product of paginatedProducts; track product.id) {
     <div class="card">
       <div class="card-container">
         <a href="/detail/{{product.id}}">
@@ -14,4 +28,18 @@
       </div>
     </div>
     }
+  </div>
+  <ul class="pagination">
+    <li><a (click)="changePage(currentPage - 1)">&laquo;</a></li>
+
+    @for (page of pages; track page) {
+    <li>
+      <a (click)="changePage(page)" [class.active]="currentPage === page">
+        {{ page }}
+      </a>
+    </li>
+    }
+
+    <li><a (click)="changePage(currentPage + 1)">&raquo;</a></li>
+  </ul>
 </div>

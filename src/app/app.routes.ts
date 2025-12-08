@@ -7,23 +7,24 @@ import { RegisterComponent } from './authentication/register.component';
 import { CartComponent } from './cart/cart.component';
 import { LoginComponent } from './authentication/login.component';
 import { AdminComponent } from './admin/admin.component';
+import { DonationComponent } from './donation/donation.component';
 
 export const routes: Routes = [
   {
-    path: '', component: Home, title: 'Home',
+    path: '', component: Home, title: 'Home', 
   },
   {
-    path: 'detail/:id', component: Detail, title: 'Detail'
+    path: 'detail/:id', component: Detail, title: 'Detail',
   },
   {
-    path: 'login', component: LoginComponent, title: 'Login'
+    path: 'login', component: LoginComponent, title: 'Login',  
   },
   {
     path: 'register', component: RegisterComponent, title: 'Register'
   },
 
   {
-    path: 'cart', component: CartComponent, title: 'Cart'
+    path: 'cart', component: CartComponent, title: 'Cart', 
   },
   {
     path: 'admin',
@@ -32,6 +33,11 @@ export const routes: Routes = [
       { path: 'manage-user', component: ManageUserComponent },
       { path: 'manage-product', component: ManageProductComponent },
       { path: '', redirectTo: 'manage-product', pathMatch: 'full' }
-    ]
+    ],
+    
+    title: 'Admin'
+  },
+  {
+    path: 'donation', component: DonationComponent, title: 'Donation'
   }
 ];

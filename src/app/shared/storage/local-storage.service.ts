@@ -8,11 +8,13 @@ export class LocalStorageService {
   constructor(@Inject(PLATFORM_ID) private platformId: any) {}
 
   private get storage(): Storage | null {
-    return isPlatformBrowser(this.platformId) ? window.localStorage : null;
+    return isPlatformBrowser(this.platformId) ? localStorage : null;
   }
 
   getItem(key: string): string | null {
-    return this.storage ? this.storage.getItem(key) : null;
+    const item = this.storage ? this.storage.getItem(key) : null;
+    // console.log(`LocalStorageService: Retrieved item with key "${key}" with value "${item}"`);
+    return item;
   }
 
   setItem(key: string, value: string): void {
