@@ -1,6 +1,8 @@
 
 .container-cart {
     padding: 2rem 0;
+    background-image: linear-gradient(to right, #d434b0, #8029fc);
+    min-height: 100vh;
 }
 
 .group-cart {

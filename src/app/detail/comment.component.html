@@ -1,0 +1,57 @@
+<div class="comment-container">
+
+    @for(c of commentViews; track c.id) {
+    <div class="comment-item">
+        <h4 class="col-1">{{ c.username }}</h4>
+        <div class="col-2">
+            @if(editingId === c.id) {
+            <textarea class="edit-comment" [(ngModel)]="editValue"></textarea>
+            } @else if (editingId !== c.id) {
+            <div class="content">
+                <span>{{ isExpanded[c.id] ? c.content : (c.content | slice:0:300) }}</span>
+                @if (c.content.length > 300 && !isExpanded[c.id]) {
+                <span class="see-more" (click)="toggleExpand(c.id)">
+                    ... Xem thêm
+                </span>
+                } @else if (c.content.length > 300 && isExpanded[c.id]) {
+                <span class="see-more" (click)="toggleExpand(c.id)">
+                    ... Thu gọn
+                </span>
+                }
+            </div>
+
+            }
+        </div>
+        <p class="col-3">{{ c.date | date:'medium' }}</p>
+
+        <div class="col-4">
+            @if(currentUserId === c.user) {
+            @if(editingId === c.id) {
+            <button class="btn-save" (click)="saveEdit(c.id)">Save</button>
+            <button class="btn-cancel" (click)="cancelEdit()">Cancel</button>
+
+            } @else {
+            <button class="btn-edit" (click)="startEdit(c)">Edit</button>
+            <button class="btn-delete" (click)="deleteComment(c.id)">Delete</button>
+            }
+            }
+        </div>
+
+    </div>
+    }
+
+    @if (currentUserId) {
+    <div class="comment-input">
+        <textarea
+            style=" width: 98%; padding: 10px; margin-top: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;"
+            type="text" [(ngModel)]="newComment" placeholder="Write a comment..."></textarea>
+        <button
+            class="send-button"
+            (click)="handleSend()">Send</button>
+    </div>
+    } @else {
+        <div style="text-align: center; color: #fff; font-weight: 600;">Please <a href="/login">login</a> to comment</div>
+    }
+
+
+</div>

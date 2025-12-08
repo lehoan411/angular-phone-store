@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 .wrapper-cart {
     background-image: linear-gradient(to right, #d434b0, #8029fc);
-    height: calc(100vh - 70px);
+    min-height: 100vh;
 }
 
 

@@ -14,7 +14,7 @@ export const routes: Routes = [
     path: '', component: Home, title: 'Home', 
   },
   {
-    path: 'detail/:id', component: Detail, title: 'Detail',
+    path: 'detail/:id', loadComponent: () => Detail, title: 'Detail'
   },
   {
     path: 'login', component: LoginComponent, title: 'Login',  

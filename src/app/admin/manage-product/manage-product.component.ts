@@ -81,6 +81,10 @@ export class ManageProductComponent implements OnInit {
       price: Number(this.price?.value),
       image: String(this.image?.value)
     }
+    if(productItem.price <= 0 || isNaN(productItem.price)) {
+      alert('Price must be a positive number.');
+      return;
+    }
     this.productService.postProduct(productItem).subscribe((res: any) => {
       if (res.id) {
         this.closeModal()

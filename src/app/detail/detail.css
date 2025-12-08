@@ -1,4 +1,7 @@
-
+.wrapper-detail {
+    background-image: linear-gradient(to right, #d434b0, #8029fc);
+    min-height: 100vh;
+}
 
 .detail-content {
     display: flex;
@@ -34,6 +37,10 @@
 
 .btn-add-to-cart:hover {
     background-color: #bf2fa3;
+}
+
+.comment-block {
+    margin: 0 7rem;
 }
 
 @media (max-width: 768px) {

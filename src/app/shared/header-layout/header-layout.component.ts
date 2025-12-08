@@ -22,7 +22,7 @@ export class HeaderLayoutComponent {
         const userData = this.localStorage.getItem('token');
         if (userData) {
             const user = JSON.parse(atob(userData));
-            console.log(user);
+           // console.log(user);
             this.role = user.role;
         } else {
             this.role = '';

@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Injectable } from '@angular/core';
 import { LocalStorageService } from '../storage/local-storage.service';
 import { UserService } from '../../../services/UserService';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root',
@@ -12,12 +12,11 @@ import { Router, RouterLink } from '@angular/router';
     standalone: true,
     templateUrl: './footer-layout.component.html',
     styleUrls: ['./footer-layout.component.css'],
-    imports: [RouterLink]
 })
 
 export class FooterLayoutComponent {
     role ='';
-    constructor( private localStorage: LocalStorageService, private userService: UserService, private router: Router) { }
+    constructor( private localStorage: LocalStorageService) { }
     ngOnInit(): void {
         const userData = this.localStorage.getItem('user');        if (userData) {
             const user = JSON.parse(userData);

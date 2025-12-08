@@ -1,39 +1,54 @@
-import { inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { UserService } from '../../../services/UserService';
-import { LocalStorageService } from '../storage/local-storage.service';
-import { map, catchError, of } from 'rxjs';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { CanActivate, Router } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
 
-export const authStatusGuard = () => {
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthUserGuard implements CanActivate {
 
-  const router = inject(Router);
-  const userService = inject(UserService);
-  const localStorageService = inject(LocalStorageService);
+  constructor(
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) { }
 
-  const userRaw = localStorageService.getItem('token');
-  const userId = JSON.parse(userRaw ? atob(userRaw) : '{}').id;
-  console.log(userRaw);
-  console.log('User ID:', userId);
+  canActivate(): boolean {
 
-  if (!userId) {
-    router.navigate(['/login']);
-    return of(false);
-  }
-
- 
-
-  return userService.getUserById(userId).pipe(
-    map(user => {
-      if (user.status === 'banned') {
-        alert('Your account has been banned. Please contact support.');
-        router.navigate(['/login']);
-        return false;
-      }
+    // SSR → allow (không check)
+    if (!isPlatformBrowser(this.platformId)) {
       return true;
-    }),
-    catchError(() => {
-      router.navigate(['/login']);
-      return of(false);
-    })
-  );
-};
+    }
+
+    // Lấy token ở browser
+    const token = localStorage.getItem('token');
+    if (!token) {
+      this.router.navigate(['/login']);
+      return false;
+    }
+
+    // ⚠️ Decode đúng JWT
+    let payload: any;
+    try {
+      payload = JSON.parse(atob(token.split('.')[1]));
+      console.log(payload)
+    } catch (e) {
+      this.router.navigate(['/login']);
+      return false;
+    }
+
+    const userRole = payload?.role;
+
+    // User → vào được
+    if (userRole === 'user') return true;
+
+    // Admin → đẩy về admin
+    if (userRole === 'admin') {
+      this.router.navigate(['/admin']);
+      return false;
+    }
+
+    // Không xác định → login
+    this.router.navigate(['/login']);
+    return false;
+  }
+}

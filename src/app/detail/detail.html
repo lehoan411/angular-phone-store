@@ -1,8 +1,8 @@
-<div class="wrapper-cart">
+<div class="wrapper-detail">
   <h1>Detail Product</h1>
   <div class="detail-content" style="padding: 0 3rem; color: #fff;">
-    <div  style="margin: 1rem;">
-      <img  class="img-detail" src="{{productItem.image}}" alt="Nine">
+    <div style="margin: 1rem;">
+      <img class="img-detail" src="{{productItem.image}}" alt="Nine">
     </div>
     <div class="product-info">
       <h3>Name Product: {{productItem.name | upperCasePipe }}</h3>
@@ -11,6 +11,15 @@
         Add to cart
       </div>
     </div>
-
+  </div>
+  <div class="comment-block">
+  <app-comment 
+  [productId]="id" 
+  [currentUserId]="currentUserId"
+  [commentViews]="commentViews"
+  (onSendComment)="sendComment($event)"
+  (onUpdateComment)="updateComment($event)"
+  (onDeleteComment)="deleteComment($event)">
+</app-comment>
   </div>
 </div>

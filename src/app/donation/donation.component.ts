@@ -1,20 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import {
-    Router, Resolve,
-    ActivatedRouteSnapshot,
-    RouterStateSnapshot
-} from '@angular/router';
-import { Donation } from '../shared/type/donation';
-import { DonationService } from '../../services/DonationService';
+import { Router } from '@angular/router';
 import { LocalStorageService } from '../shared/storage/local-storage.service';
-import { User } from '../shared/type/user';
-
-
-
-
-
-
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'donation-root',
@@ -27,36 +15,44 @@ export class DonationComponent {
 
     donation = new FormGroup({
         amount: new FormControl('', Validators.required),
-        message: new FormControl(''),
-    })
-    get amount() {
-        return this.donation.get('amount');
-    }
-    get message() {
-        return this.donation.get('message');
-    }
-    constructor(private localStorageService: LocalStorageService, private donationService: DonationService, private router: Router) {
-    }
+        message: new FormControl('')
+    });
 
-    handleCreatePayment() {
-        if (this.amount?.hasError('required')) return;
-        const amountValue = Number(this.amount?.value) || 0;
-        window.location.href = `/create-payment-link`;
-    }
+    constructor(
+        private localStorageService: LocalStorageService,
+        private http: HttpClient,
+        private router: Router
+    ) {}
 
+    get amount() { return this.donation.get('amount'); }
+    get message() { return this.donation.get('message'); }
 
     handleDonate() {
-        const userData = this.localStorageService.getItem('token');
-        if (this.amount?.hasError('required') || this.message?.hasError('required')) return;
-        const donation = {
-            id: Math.random().toString(36).substring(2, 9),
-            user: userData ? JSON.parse(atob(userData)).id : 'guest',
-            amount: Number(this.amount?.value) || 0,
-            message: String(this.message?.value) || '',
-            date: new Date().toISOString()
+        if (this.donation.invalid) return;
+
+        const token = this.localStorageService.getItem('token');
+        const headers: any = {};
+
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
         }
-        this.donationService.postDonation(donation).subscribe((res: any) => {
-           
+
+        this.http.post(
+            'https://0a0dd153179c.ngrok-free.app/create-payment-link',
+            {
+                amount: Number(this.amount?.value),
+                message: this.message?.value || ''
+            },
+            { headers }
+        ).subscribe({
+            next: (res: any) => {
+                if (res.url) {
+                    window.location.href = res.url; 
+                }
+            },
+            error: err => {
+                console.error('Payment link error:', err);
+            }
         });
     }
 }

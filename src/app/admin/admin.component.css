@@ -1,6 +1,6 @@
 .admin-wrapper {
     background-image: linear-gradient(to right, #1e1c1d, #696374);
-    height: 100%;
+    min-height: 100vh;
 }
 
 .container {
