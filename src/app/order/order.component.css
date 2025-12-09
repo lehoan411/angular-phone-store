@@ -51,23 +51,23 @@
   padding-bottom: 1rem;
 }
 
-
 .footer-cart {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.btn-checkout {
+.btn-purchase {
   padding: 0.5rem 1rem;
-  background-color: #8029fc;
-  color: #fff;
+  background-color: #28a745;
+  color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 16px;
+  text-align: center;
 }
 
-.btn-checkout:hover {
-  background-color: #d434b0;
+.btn-purchase:hover {
+  background-color: #218838;
 }
+

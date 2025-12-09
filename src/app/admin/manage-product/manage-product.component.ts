@@ -63,7 +63,7 @@ export class ManageProductComponent implements OnInit {
     this.isOpen = false;
     this.product.reset();
   }
-  constructor(private localStorageService: LocalStorageService, private userService: UserService, private productService: ProductService, private router: Router) {
+  constructor(private localStorageService: LocalStorageService, private productService: ProductService) {
   }
 
   handleAddCart() {

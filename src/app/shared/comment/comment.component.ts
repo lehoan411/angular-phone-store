@@ -1,9 +1,6 @@
-import { CommentService } from "../../services/CommentService";
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { Comment } from "../shared/type/comment";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
-import { LocalStorageService } from "../shared/storage/local-storage.service";
 
 @Component({
     selector: 'app-comment',

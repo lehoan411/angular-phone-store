@@ -7,9 +7,11 @@ import { CurrencyPipe } from '../shared/pipes/CurencyPipe.pipe';
 import { UpperCasePipe } from '../shared/pipes/UpperCasePipe.pipe';
 import { FormsModule } from '@angular/forms';
 import { LocalStorageService } from '../shared/storage/local-storage.service';
+import { OrderService } from '../../services/OrderService';
+import { Order } from '../shared/type/order';
 
 @Component({
-  selector: 'home-root',
+  selector: 'cart-root',
   standalone: true,
   imports: [FormsModule, CurrencyPipe, UpperCasePipe],
   templateUrl: './cart.component.html',
@@ -21,6 +23,8 @@ export class CartComponent implements OnInit, OnDestroy {
 
   cartItems: any[] = [];
 
+  orderItems: any[] = [];
+
   get totalPrice(): number {
     return this.cartItems.reduce((sum, item) => sum + item.product.price, 0);
   }
@@ -29,8 +33,9 @@ export class CartComponent implements OnInit, OnDestroy {
     private productService: ProductService,
     private cartService: CartService,
     private userService: UserService,
-    private localStorageService: LocalStorageService
-  ) {}
+    private localStorageService: LocalStorageService,
+    private orderService: OrderService
+  ) { }
 
   ngOnInit(): void {
     this.subscription = combineLatest([
@@ -67,5 +72,51 @@ export class CartComponent implements OnInit, OnDestroy {
       this.cartItems = this.cartItems.filter(item => item.id !== id);
     });
     window.location.reload();
+  }
+
+  handleCheckout() {
+    if (this.cartItems.length === 0) {
+      alert("Your cart is empty!");
+      return;
+    }
+
+    const userId = this.cartItems[0].user.id;
+
+   
+    this.orderService.getOrders().subscribe(orders => {
+      const hasPendingOrder = orders.some(
+        o => o.user === userId && o.status.toLowerCase() === "Pending"
+      );
+
+      if (hasPendingOrder) {
+        alert("You already have a pending order! Please complete it before creating a new one.");
+        return;
+      }
+
+ 
+      const order: Order = {
+        id: Math.random().toString(36).substring(2),
+        user: userId,
+        products: this.cartItems.map(item => item.product.id),
+        totalPrice: this.totalPrice,
+        orderDate: new Date().toISOString(),
+        status: 'Pending'
+      };
+
+      this.orderService.addOrder(order).subscribe({
+        next: () => {
+          const deleteRequests = this.cartItems.map(item =>
+            this.cartService.deleteCart(item.id)
+          );
+
+          combineLatest(deleteRequests).subscribe(() => {
+            alert("Checkout successful!");
+            this.cartItems = [];
+            window.location.href = '/orders';
+          });
+        },
+        error: () => alert("Checkout failed!")
+      });
+    });
   }
 }

@@ -33,15 +33,17 @@
         <a class="btn-navigation" href="/donation">Donate</a>
 
         @if (isLoggedIn) {
-         @if (role !== 'admin') {
+        @if (role !== 'admin') {
         <a class="btn-navigation" href="/cart"><img
                 src="https://www.citypng.com/public/uploads/preview/hd-shopping-cart-white-logo-icon-transparent-png-701751694973936amdcratijm.png"
-                alt="shopping" width="20px" height="20px"></a>
-        
+                alt="shopping" width="20px" height="20px">
+        </a>
+        <a class="btn-navigation" href="/orders">My Orders</a>
+
         } @else if (role === 'admin') {
         <a class="btn-navigation" href="/admin/manage-product">Manage</a>
-        } 
-        
+        }
+
 
         <a class="btn-navigation" (click)="handleLogout()">Logout</a>
         } @else if (!isLoggedIn) {

@@ -7,7 +7,7 @@ import { CurrencyPipe } from '../shared/pipes/CurencyPipe.pipe';
 import { UpperCasePipe } from '../shared/pipes/UpperCasePipe.pipe';
 import { LocalStorageService } from '../shared/storage/local-storage.service';
 import { CommonModule } from '@angular/common';
-import { CommentComponent } from './comment.component';
+import { CommentComponent } from '../shared/comment/comment.component';
 import { CommentService } from '../../services/CommentService';
 import { UserService } from '../../services/UserService';
 

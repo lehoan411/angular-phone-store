@@ -1,14 +1,13 @@
 <div class="title-product">
   <div class="filter-container">
-    <input type="text" placeholder="Tìm theo tên hoặc giá..." [(ngModel)]="searchText" (input)="applyFilters()" />
-
+    <input type="text" placeholder="Search by name or price..." [(ngModel)]="searchText" (input)="applyFilters()" />
 
     <select [(ngModel)]="sortOption" (change)="applyFilters()">
-      <option value="">-- Sắp xếp --</option>
-      <option value="name-asc">Tên A → Z</option>
-      <option value="name-desc">Tên Z → A</option>
-      <option value="price-asc">Giá tăng dần</option>
-      <option value="price-desc">Giá giảm dần</option>
+      <option value="">-- Order By --</option>
+      <option value="name-asc">Name A → Z</option>
+      <option value="name-desc">Name Z → A</option>
+      <option value="price-asc">Price Low to High</option>
+      <option value="price-desc">Price High to Low</option>
     </select>
 
   </div>

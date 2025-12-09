@@ -28,7 +28,7 @@ export class ProductItemComponent {
   totalPages = 1;
 
   sortOption: string = '';
-  searchText: string = ''; 
+  searchText: string = '';
   filteredProducts: ProductItem[] = [];
 
   ngOnChanges() {
@@ -43,11 +43,9 @@ export class ProductItemComponent {
     const text = this.searchText.trim().toLowerCase();
 
     if (text !== '') {
-      const searchNumber = Number(text);
-
       result = result.filter(p => {
         const matchName = p.name.toLowerCase().includes(text);
-        const matchPrice = !isNaN(searchNumber) && p.price === searchNumber;
+        const matchPrice = p.price.toString().toLowerCase().includes(text);
         return matchName || matchPrice;
       });
     }

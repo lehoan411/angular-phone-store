@@ -1,0 +1,53 @@
+<div class="container-cart">
+    <h1>Your Order</h1>
+    @if (!orderInfo) {
+    <p style="color: #fff; text-align: center; margin-top: 1rem;">
+        You have no pending orders.
+    </p>
+    }
+
+    @if (orderInfo) {
+    <div class="group-cart" style="margin-bottom: 2rem;">
+        <h2>Buyer Information</h2>
+
+        <div class="buyer-info">
+            <p><strong>Name:</strong> {{ buyer?.username }}</p>
+            <p><strong>Email:</strong> {{ buyer?.email }}</p>
+            <p><strong>Order Date:</strong> {{ orderInfo?.orderDate | date:'medium' }}</p>
+            <p><strong>Status:</strong> {{ orderInfo?.status }}</p>
+        </div>
+    </div>
+
+    <div class="group-cart">
+        <div class="header-cart">
+            <div class="col-1">Image</div>
+            <div class="col-2">Name</div>
+            <div class="col-3">Price</div>
+        </div>
+
+        <div class="body-cart">
+            @for (item of orderItems; track $index) {
+            <div class="row-cart">
+                <div class="col-1">
+                    <img width="50" [src]="item.product?.image" />
+                </div>
+
+                <div class="col-2">
+                    {{ item.product?.name | upperCasePipe }}
+                </div>
+
+                <div class="col-3">
+                    {{ item.product?.price | currencyPipe }}
+                </div>
+            </div>
+            }
+
+            <div class="footer-cart">
+                <strong>Total Price: {{ totalPrice | currencyPipe }}</strong>
+                <div class="btn-purchase" (click)="completePurchase()">Complete purchase</div>
+            </div>
+        </div>
+
+    </div>
+    }
+</div>

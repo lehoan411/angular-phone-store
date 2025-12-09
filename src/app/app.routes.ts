@@ -8,6 +8,7 @@ import { CartComponent } from './cart/cart.component';
 import { LoginComponent } from './authentication/login.component';
 import { AdminComponent } from './admin/admin.component';
 import { DonationComponent } from './donation/donation.component';
+import { OrderComponent } from './order/order.component';
 
 export const routes: Routes = [
   {
@@ -39,5 +40,8 @@ export const routes: Routes = [
   },
   {
     path: 'donation', component: DonationComponent, title: 'Donation'
+  },
+  {
+    path: 'orders', component: OrderComponent, title: 'Orders'
   }
 ];
