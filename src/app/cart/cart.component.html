@@ -1,5 +1,5 @@
 <div class="container-cart">
-  <h1>Shopping Cart</h1>
+  <h1>User</h1>
 
   <div class="group-cart">
     <div class="header-cart">
@@ -13,7 +13,7 @@
       @for (item of cartItems; track $index) {
       <div class="row-cart">
         <div class="col-1">
-          <img width="50" src="{{ item.product.image }}" />
+          <img width="50" src="{{ item.product.image[0] }}" />
         </div>
 
         <div class="col-2">

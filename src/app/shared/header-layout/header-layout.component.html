@@ -30,23 +30,44 @@
     </div>
     <div class="group-navigation">
 
+        <!-- Nút Donate luôn nằm ngoài -->
         <a class="btn-navigation" href="/donation">Donate</a>
 
+        <!-- Nếu đã đăng nhập -->
         @if (isLoggedIn) {
-        @if (role !== 'admin') {
-        <a class="btn-navigation" href="/cart"><img
-                src="https://www.citypng.com/public/uploads/preview/hd-shopping-cart-white-logo-icon-transparent-png-701751694973936amdcratijm.png"
-                alt="shopping" width="20px" height="20px">
-        </a>
-        <a class="btn-navigation" href="/orders">My Orders</a>
 
-        } @else if (role === 'admin') {
-        <a class="btn-navigation" href="/admin/manage-product">Manage</a>
-        }
+        <!-- Avatar + Dropdown -->
+        <div class="avatar-dropdown" (click)="toggleDropdown()" [class.open]="dropdownOpen">
+
+            <img class="avatar-img" [src]="avatarUrl"
+                alt="avatar">
+            @if (dropdownOpen) {
+            <div class="dropdown-menu">
+
+                <!-- Người dùng thường -->
+                @if (role !== 'admin') {
+                <a class="dropdown-item" href="/cart">Cart</a>
+                <a class="dropdown-item" href="/orders">My Orders</a>
+                }
+
+                <!-- Admin -->
+                @if (role === 'admin') {
+                <a class="dropdown-item" href="/admin/manage-product">Manage</a>
+                }
+
+                <a class="dropdown-item" href="/profile-setting">Profile Setting</a>
+
+                <button class="dropdown-item logout" (click)="handleLogout()">
+                    Logout
+                </button>
+
+            </div>
+            }
+        </div>
 
 
-        <a class="btn-navigation" (click)="handleLogout()">Logout</a>
-        } @else if (!isLoggedIn) {
+        } @else {
+
         <a class="btn-navigation" href="/login">Login</a>
         <a class="btn-navigation" href="/register">Register</a>
         }

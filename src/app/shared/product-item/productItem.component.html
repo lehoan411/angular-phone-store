@@ -16,10 +16,10 @@
     <div class="card">
       <div class="card-container">
         <a href="/detail/{{product.id}}">
-          <img class="image-card" src="{{ product.image }}" alt="{{ product.name }}" />
+          <img class="image-card" src="{{ product.image[0] }}" alt="{{ product.name }}" />
         </a>
         <div class="card-name">{{ product.name| upperCasePipe }}</div>
-        <div class="card-price">{{ product.price| currencyPipe }}</div>
+        <div class="card-price demo rainbow">{{ product.price| currencyPipe }}</div>
         <div class="add-to-cart">
           <a href="/detail/{{product.id}}" class="btn-detail">View Detail</a>
           <a (click)="handleAddToCart(product)" class="btn-cart">Add to cart</a>

@@ -29,7 +29,7 @@
             @for (item of orderItems; track $index) {
             <div class="row-cart">
                 <div class="col-1">
-                    <img width="50" [src]="item.product?.image" />
+                    <img width="50" [src]="item.product?.image[0]" />
                 </div>
 
                 <div class="col-2">

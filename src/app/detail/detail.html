@@ -1,25 +1,31 @@
 <div class="wrapper-detail">
   <h1>Detail Product</h1>
   <div class="detail-content" style="padding: 0 3rem; color: #fff;">
-    <div style="margin: 1rem;">
-      <img class="img-detail" src="{{productItem.image}}" alt="Nine">
+    <div style="margin: 1rem; display: flex;">
+      <div class="image-slide">
+        @for (img of productItem.image; track $index) {
+        <div class="img-small" (click)="selectImage($index)">
+          <img [src]="img" [class.selected]="$index === selectedImageIndex" />
+        </div>                  
+        }
+
+      </div>
+      <img class="img-detail" [src]="productItem.image[selectedImageIndex]" alt="Nine">
     </div>
     <div class="product-info">
-      <h3>Name Product: {{productItem.name | upperCasePipe }}</h3>
-      <h4>Price Product: {{productItem.price | currencyPipe }}</h4>
+      <h3>Name Product:</h3>
+      <div style="font-size: 2rem;">{{productItem.name | upperCasePipe }}</div>
+      <h4>Price Product: </h4>
+      <div class='demo rainbow'>{{productItem.price | currencyPipe }}</div>
       <div class="btn-add-to-cart" (click)="handleAddToCart()" style="padding: 0.8rem; color: #fff; margin-top: .4rem;">
         Add to cart
       </div>
     </div>
   </div>
   <div class="comment-block">
-  <app-comment 
-  [productId]="id" 
-  [currentUserId]="currentUserId"
-  [commentViews]="commentViews"
-  (onSendComment)="sendComment($event)"
-  (onUpdateComment)="updateComment($event)"
-  (onDeleteComment)="deleteComment($event)">
-</app-comment>
+    <app-comment [productId]="id" [currentUserId]="currentUserId" [commentViews]="commentViews"
+      (onSendComment)="sendComment($event)" (onUpdateComment)="updateComment($event)"
+      (onDeleteComment)="deleteComment($event)">
+    </app-comment>
   </div>
 </div>

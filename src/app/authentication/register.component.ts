@@ -36,7 +36,10 @@ export class RegisterComponent {
      const user: User = {
       id: Math.random().toString(36).substring(2, 9),
       username: String(this.username?.value),
+      avatar: 'https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_960_720.png',
       email: String(this.email?.value),
+      address: 'none',
+      phone: 'none',
       password: String(this.password?.value),
       role: 'user',
       status: 'active'

@@ -12,31 +12,40 @@ import { OrderComponent } from './order/order.component';
 
 export const routes: Routes = [
   {
-    path: '', component: Home, title: 'Home', 
+    path: '', component: Home, title: 'Home',
   },
   {
     path: 'detail/:id', loadComponent: () => Detail, title: 'Detail'
   },
   {
-    path: 'login', component: LoginComponent, title: 'Login',  
+    path: 'login', component: LoginComponent, title: 'Login',
   },
   {
     path: 'register', component: RegisterComponent, title: 'Register'
   },
+  {
+    path: 'profile-setting', loadComponent: () => import('./profile-settimg/profile-setting.component').then(m => m.ProfileSettingComponent), title: 'Profile Setting'
+  },
 
   {
-    path: 'cart', component: CartComponent, title: 'Cart', 
+    path: 'cart', component: CartComponent, title: 'Cart',
   },
   {
     path: 'admin',
-    component: AdminComponent,
+    loadComponent: () =>
+      import('./admin/admin.component').then(m => m.AdminComponent),
     children: [
-      { path: 'manage-user', component: ManageUserComponent },
-      { path: 'manage-product', component: ManageProductComponent },
-      { path: '', redirectTo: 'manage-product', pathMatch: 'full' }
-    ],
-    
-    title: 'Admin'
+      {
+        path: 'manage-user',
+        loadComponent: () =>
+          import('./admin/manage-user/manage-user.component').then(m => m.ManageUserComponent)
+      },
+      {
+        path: 'manage-product',
+        loadComponent: () =>
+          import('./admin/manage-product/manage-product.component').then(m => m.ManageProductComponent)
+      }
+    ]
   },
   {
     path: 'donation', component: DonationComponent, title: 'Donation'

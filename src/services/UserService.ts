@@ -13,7 +13,7 @@ export class UserService {
         return this.http.get<any>(`http://localhost:9999/users/${id}`).pipe()
     }
     editUser(user: User): Observable<User> {
-        return this.http.put<any>(`http://localhost:9999/users/${user.id}`, user).pipe()
+        return this.http.patch<any>(`http://localhost:9999/users/${user.id}`, user).pipe()
     }
     banUser(id: string): Observable<User> {
         return this.http.put<any>(`http://localhost:9999/users/${id}/ban`, {}).pipe()

@@ -55,6 +55,7 @@ export class LoginComponent {
       JSON.stringify({
         id: matchedUser.id,
         username: matchedUser.username,
+        avatar: matchedUser.avatar,
         email: matchedUser.email,
         role: matchedUser.role,
         status: matchedUser.status

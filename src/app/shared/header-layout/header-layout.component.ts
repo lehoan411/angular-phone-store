@@ -16,25 +16,33 @@ import { Router, RouterLink } from '@angular/router';
 })
 
 export class HeaderLayoutComponent {
+    dropdownOpen = false;
+
+    avatarUrl = '';
     role = '';
-    constructor(private localStorage: LocalStorageService) { }
+    constructor(private localStorage: LocalStorageService, private userService: UserService) { }
     ngOnInit(): void {
         const userData = this.localStorage.getItem('token');
         if (userData) {
-            const user = JSON.parse(atob(userData));
-           // console.log(user);
-            this.role = user.role;
-        } else {
-            this.role = '';
+            const userId = JSON.parse(atob(userData)).id;
+            this.userService.getUserById(userId).subscribe(user => {
+                this.avatarUrl = user.avatar || '';
+                this.role = user.role || '';
+            });
         }
+        
     }
 
     get isLoggedIn() {
         return Boolean(this.localStorage.getItem('token'));
     }
 
+    toggleDropdown() {
+        this.dropdownOpen = !this.dropdownOpen;
+    }
+
     handleLogout() {
-        if(this.role === 'admin') {
+        if (this.role === 'admin') {
             this.localStorage.removeItem('token');
             window.location.href = '/login';
         } else {

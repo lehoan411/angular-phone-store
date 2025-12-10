@@ -47,7 +47,7 @@ export class ManageProductComponent implements OnInit {
     this.editData = {
       name: item.name,
       price: String(item.price),
-      image: item.image
+      image: item.image[0]
     };
   }
 
@@ -79,7 +79,7 @@ export class ManageProductComponent implements OnInit {
       user: JSON.parse(atob(userData)).id,
       name: String(this.name?.value),
       price: Number(this.price?.value),
-      image: String(this.image?.value)
+      image: [String(this.image?.value)]
     }
     if(productItem.price <= 0 || isNaN(productItem.price)) {
       alert('Price must be a positive number.');
@@ -123,7 +123,7 @@ export class ManageProductComponent implements OnInit {
       user: JSON.parse(atob(userData)).id,
       name: this.editData.name,
       price: Number(this.editData.price),
-      image: this.editData.image
+      image: this.editData.image.split(',').map(img => img.trim())
     };
 
     this.productService.editProduct(updatedProduct).subscribe((res: any) => {

@@ -19,7 +19,7 @@
             @if (editId === item.id) {
             <input type="text" [(ngModel)]="editData.image" class="inline-input" />
             } @else {
-            <img width="50" src="{{ item.image }}" />
+            <img width="50" src="{{ item.image[0] }}" />
             }
           </div>
 

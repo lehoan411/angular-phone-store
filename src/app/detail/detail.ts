@@ -23,7 +23,7 @@ export class Detail implements OnInit {
   productItem: ProductItem = {
     id: '',
     user: '',
-    image: '',
+    image: [] as string[],
     name: '',
     price: 0,
   }
@@ -47,6 +47,12 @@ export class Detail implements OnInit {
     this.loadProduct();
     this.loadComments();
 
+  }
+
+  selectedImageIndex = 0;
+
+  selectImage(index: number) {
+    this.selectedImageIndex = index;
   }
 
   loadProduct() {
