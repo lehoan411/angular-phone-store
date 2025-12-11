@@ -108,6 +108,7 @@ export class ProfileSettingComponent implements OnInit {
     this.userService.editUser(updatedUser).subscribe(() => {
       this.currentUser = updatedUser;
       alert("Update successful!");
+      window.location.reload();
     });
   }
 

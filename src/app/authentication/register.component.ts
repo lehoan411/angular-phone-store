@@ -46,7 +46,7 @@ export class RegisterComponent {
     }
     this.userService.register(user).subscribe((res: any)=> {
       if (res.id) {
-        window.location.href = '/login';
+        this.router.navigate(['/login']);
       }
     });
   }

@@ -73,9 +73,9 @@ export class LoginComponent {
 
    
     if (matchedUser.role === 'admin') {
-      window.location.href = '/admin/manage-user';
+      this.router.navigate(['/admin/manage-user']);
     } else {
-      window.location.href = '/';
+      this.router.navigate(['/']);
     }
   });
 }

@@ -8,12 +8,13 @@ import { CurrencyPipe } from '../../shared/pipes/CurencyPipe.pipe';
 import { UpperCasePipe } from '../../shared/pipes/UpperCasePipe.pipe';
 import { LocalStorageService } from '../../shared/storage/local-storage.service';
 import { FormsModule } from '@angular/forms';
-
+import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'manage-product-root',
   standalone: true,
-  imports: [ReactiveFormsModule, CurrencyPipe, UpperCasePipe, FormsModule,],
+  imports: [ReactiveFormsModule, CurrencyPipe, UpperCasePipe, FormsModule,  CommonModule,  ],
   templateUrl: './manage-product.component.html',
   styleUrls: ['./manage-product.component.css',]
 })
@@ -63,13 +64,14 @@ export class ManageProductComponent implements OnInit {
     this.isOpen = false;
     this.product.reset();
   }
-  constructor(private localStorageService: LocalStorageService, private productService: ProductService) {
+  constructor(private localStorageService: LocalStorageService, 
+    private productService: ProductService,
+    private cd: ChangeDetectorRef) {
   }
 
   handleAddCart() {
     if (this.name?.hasError('required') || this.price?.hasError('required') || this.image?.hasError('required')) return;
     const userData = this.localStorageService.getItem('token');
-    console.log(userData);
     if (!userData) {
       alert('Please log in to create a product.');
       return;
@@ -106,13 +108,13 @@ export class ManageProductComponent implements OnInit {
 
     this.productService.getProducts().subscribe((res: any) => {
       this.productList = res.filter((product: ProductItem) => product.user == user.id);
+      this.cd.detectChanges();
     });
   }
 
 
   handleEdit(id: string) {
     const userData = this.localStorageService.getItem('token');
-    console.log(userData);
     if (!userData) {
       alert('Please log in to create a product.');
       return;

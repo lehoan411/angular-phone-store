@@ -10,12 +10,16 @@ import { AdminComponent } from './admin/admin.component';
 import { DonationComponent } from './donation/donation.component';
 import { OrderComponent } from './order/order.component';
 
+import { AuthGuard } from './shared/auth-guard/auth-guard';
+import { AdminGuard } from './shared/auth-guard/admin.guard';
+import { UserGuard } from './shared/auth-guard/user.guard';
+
 export const routes: Routes = [
   {
-    path: '', component: Home, title: 'Home',
+    path: '', component: Home, title: 'Home', canActivate: [UserGuard],
   },
   {
-    path: 'detail/:id', loadComponent: () => Detail, title: 'Detail'
+    path: 'detail/:id', loadComponent: () => Detail, title: 'Detail', canActivate: [UserGuard],
   },
   {
     path: 'login', component: LoginComponent, title: 'Login',
@@ -24,33 +28,41 @@ export const routes: Routes = [
     path: 'register', component: RegisterComponent, title: 'Register'
   },
   {
-    path: 'profile-setting', loadComponent: () => import('./profile-settimg/profile-setting.component').then(m => m.ProfileSettingComponent), title: 'Profile Setting'
+    path: 'profile-setting', loadComponent: () => import('./profile-setting/profile-setting.component').then(m => m.ProfileSettingComponent), title: 'Profile Setting', canActivate: [AuthGuard],
   },
 
   {
-    path: 'cart', component: CartComponent, title: 'Cart',
+    path: 'cart', component: CartComponent, title: 'Cart', canActivate: [AuthGuard, UserGuard],
   },
   {
     path: 'admin',
+    canActivate: [AuthGuard, AdminGuard],
     loadComponent: () =>
       import('./admin/admin.component').then(m => m.AdminComponent),
     children: [
       {
         path: 'manage-user',
         loadComponent: () =>
-          import('./admin/manage-user/manage-user.component').then(m => m.ManageUserComponent)
+          import('./admin/manage-user/manage-user.component').then(m => m.ManageUserComponent),
+          canActivate: [AdminGuard],
       },
       {
         path: 'manage-product',
         loadComponent: () =>
-          import('./admin/manage-product/manage-product.component').then(m => m.ManageProductComponent)
-      }
+          import('./admin/manage-product/manage-product.component').then(m => m.ManageProductComponent),
+          canActivate: [AdminGuard],
+      },
+      {
+        path: '',
+        redirectTo: 'manage-user',
+        pathMatch: 'full'
+      },
     ]
   },
   {
     path: 'donation', component: DonationComponent, title: 'Donation'
   },
   {
-    path: 'orders', component: OrderComponent, title: 'Orders'
+    path: 'orders', component: OrderComponent, title: 'Orders', canActivate: [AuthGuard, UserGuard]
   }
 ];

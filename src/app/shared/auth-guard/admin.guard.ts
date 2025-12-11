@@ -1,18 +1,18 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
 import { CanActivate, Router } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
 import { LocalStorageService } from '../storage/local-storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class AdminGuard implements CanActivate {
 
   constructor(
     private router: Router,
     private localStorageService: LocalStorageService,
     @Inject(PLATFORM_ID) private platformId: Object
-  ) { }
+  ) {}
 
   canActivate(): boolean {
 
@@ -21,14 +21,29 @@ export class AuthGuard implements CanActivate {
     }
 
     const token = this.localStorageService.getItem('token');
-    // console.log('AuthGuard token:', token);
+    // console.log('AdminGuard token:', token);
 
     if (!token) {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/']);
       return false;
     }
 
-    return true;
-  }
+    try {
 
+      const payload = JSON.parse(atob(token));
+
+      // console.log('AdminGuard payload:', payload);
+
+      if (payload.role !== 'admin') {
+        this.router.navigate(['/']);
+        return false;
+      }
+
+      return true;
+    } catch (e) {
+      console.error('Invalid token format:', e);
+      this.router.navigate(['/']);
+      return false;
+    }
+  }
 }

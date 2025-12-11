@@ -8,6 +8,8 @@ import { UpperCasePipe } from '../shared/pipes/UpperCasePipe.pipe';
 import { CommonModule } from "@angular/common";
 import { FormsModule } from '@angular/forms';
 import { LocalStorageService } from '../shared/storage/local-storage.service';
+import { Router } from '@angular/router';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
     selector: 'order-root',
@@ -30,6 +32,8 @@ export class OrderComponent implements OnInit, OnDestroy {
         private productService: ProductService,
         private userService: UserService,
         private localStorageService: LocalStorageService,
+        private router: Router,
+        private cd: ChangeDetectorRef
     ) { }
 
     ngOnInit(): void {
@@ -38,18 +42,12 @@ export class OrderComponent implements OnInit, OnDestroy {
             this.productService.getProducts(),
             this.userService.getUsers()
         ]).subscribe(([orders, products, users]) => {
-
-
             const token = this.localStorageService.getItem('token');
             let currentUserId = null;
-
             if (token) {
                 const user = JSON.parse(atob(token));
                 currentUserId = user.id;
             }
-
-
-
             const myOrder = orders.find(
                 o => o.user === currentUserId && o.status === "Pending"
             );
@@ -60,20 +58,14 @@ export class OrderComponent implements OnInit, OnDestroy {
                 this.totalPrice = 0;
                 return;
             }
-
             this.orderInfo = myOrder;
             this.totalPrice = myOrder.totalPrice;
-
-
             this.buyer = users.find(u => u.id === myOrder.user);
-
-
             this.orderItems = myOrder.products.map(productId => {
                 const product = products.find(p => p.id === productId);
                 return { product };
             });
-
-
+            this.cd.detectChanges();
         });
     }
 
@@ -88,7 +80,7 @@ export class OrderComponent implements OnInit, OnDestroy {
 
         this.orderService.editOrder(updatedOrder).subscribe(() => {
             alert('Purchase completed successfully!');
-            window.location.href = '/';
+            this.router.navigate(['/']);
         });
     }
 

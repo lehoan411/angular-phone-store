@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { LocalStorageService } from '../shared/storage/local-storage.service';
 import { OrderService } from '../../services/OrderService';
 import { Order } from '../shared/type/order';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'cart-root',
@@ -34,32 +35,40 @@ export class CartComponent implements OnInit, OnDestroy {
     private cartService: CartService,
     private userService: UserService,
     private localStorageService: LocalStorageService,
-    private orderService: OrderService
+    private orderService: OrderService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
-    this.subscription = combineLatest([
+    const userData = this.localStorageService.getItem('token');
+    let currentUserId: string | null = null;
+
+    if (userData) {
+      const user = JSON.parse(atob(userData));
+      currentUserId = user.id;
+    }
+
+    // Lấy users + products trước
+    combineLatest([
       this.userService.getUsers(),
-      this.productService.getProducts(),
-      this.cartService.getCarts()
-    ]).subscribe(([users, products, carts]) => {
-      const userData = this.localStorageService.getItem('token');
-      let currentUserId = null;
-      if (userData) {
-        const user = JSON.parse(atob(userData));
-        currentUserId = user.id;
-      }
-      this.cartItems = carts.filter(cart => cart.user === currentUserId).map(cart => {
-        const user = users.find(u => u.id.toString() === cart.user);
-        const product = products.find(p => p.id === cart.product);
+      this.productService.getProducts()
+    ]).subscribe(([users, products]) => {
 
-        return {
-          id: cart.id,
-          user: user || {},
-          product: product || {}
-        };
+      // Sau đó mới load cart riêng
+      this.cartService.getCarts().subscribe(carts => {
+        this.cartItems = carts
+          .filter(cart => cart.user === currentUserId)
+          .map(cart => {
+            const user = users.find(u => u.id.toString() === cart.user);
+            const product = products.find(p => p.id === cart.product);
+
+            return {
+              id: cart.id,
+              user: user || {},
+              product: product || {}
+            };
+          });
       });
-
     });
   }
 
@@ -68,10 +77,15 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   handleDelete(id: string) {
-    this.cartService.deleteCart(id).subscribe(() => {
-      this.cartItems = this.cartItems.filter(item => item.id !== id);
+
+    this.cartItems = this.cartItems.filter(item => item.id !== id);
+
+    this.cartService.deleteCart(id).subscribe({
+      next: () => { },
+      error: () => {
+        alert("Delete failed!");
+      }
     });
-    window.location.reload();
   }
 
   handleCheckout() {
@@ -82,10 +96,10 @@ export class CartComponent implements OnInit, OnDestroy {
 
     const userId = this.cartItems[0].user.id;
 
-   
+
     this.orderService.getOrders().subscribe(orders => {
       const hasPendingOrder = orders.some(
-        o => o.user === userId && o.status.toLowerCase() === "Pending"
+        o => o.user === userId && o.status.toLowerCase() === "pending"
       );
 
       if (hasPendingOrder) {
@@ -93,7 +107,7 @@ export class CartComponent implements OnInit, OnDestroy {
         return;
       }
 
- 
+
       const order: Order = {
         id: Math.random().toString(36).substring(2),
         user: userId,
@@ -112,7 +126,7 @@ export class CartComponent implements OnInit, OnDestroy {
           combineLatest(deleteRequests).subscribe(() => {
             alert("Checkout successful!");
             this.cartItems = [];
-            window.location.href = '/orders';
+            this.router.navigate(['/orders']);
           });
         },
         error: () => alert("Checkout failed!")

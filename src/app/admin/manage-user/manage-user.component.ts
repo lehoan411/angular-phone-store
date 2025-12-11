@@ -7,18 +7,21 @@ import { Router } from '@angular/router';
 import { LocalStorageService } from '../../shared/storage/local-storage.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'manage-user-root',
-  standalone: true,
   imports: [ReactiveFormsModule, FormsModule, CommonModule],
   templateUrl: './manage-user.component.html',
   styleUrls: ['./manage-user.component.css',]
 })
-export class ManageUserComponent implements OnInit {
+export class ManageUserComponent {
   userList: User[] = []
 
-  constructor(private localStorageService: LocalStorageService, private userService: UserService, private productService: ProductService, private router: Router) { }
+  constructor(private localStorageService: LocalStorageService,
+     private userService: UserService, 
+     private cd: ChangeDetectorRef
+    ) { }
 
   ngOnInit(): void {
     const currentUser = this.localStorageService.getItem('token');
@@ -29,6 +32,7 @@ export class ManageUserComponent implements OnInit {
 
     this.userService.getUsers().subscribe((res: any) => {
       this.userList = res.filter((u: User) => u.id !== user.id);
+      this.cd.detectChanges();
     });
   }
 

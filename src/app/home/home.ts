@@ -1,10 +1,11 @@
 import { Component, DoCheck, OnDestroy, OnInit, signal, } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { Router} from '@angular/router';
 import { ProductItem } from '../shared/type/productItem';
 import { ProductItemComponent } from '../shared/product-item/productItem.component';
 import { ProductService } from '../../services/ProductService';
 import { CartService } from '../../services/CartService';
 import { map, Subscription } from 'rxjs';
+import { ChangeDetectorRef } from '@angular/core';
 
 
 
@@ -26,7 +27,11 @@ export class Home implements OnInit, OnDestroy {
 
   products: ProductItem[] = []
 
-  constructor(private productService: ProductService, private cartService: CartService) {
+  constructor(private productService: ProductService, 
+    private cartService: CartService,
+    private cd: ChangeDetectorRef,
+    private router: Router
+  ) {
     this.getProductApi = new Subscription()
   }
 
@@ -42,7 +47,7 @@ export class Home implements OnInit, OnDestroy {
       )
     ).subscribe((res) => {
       this.products = res;
-      //  console.log('Fetched blog data', res);
+      this.cd.detectChanges();
     })
   }
 
@@ -58,7 +63,7 @@ export class Home implements OnInit, OnDestroy {
       alert('Please log in to add items to your cart.');
       return;
     } else if (userData && JSON.parse(atob(userData)).role === 'admin') {
-      window.location.href = '/admin/manage-product';
+      this.router.navigate(['/admin/manage-product']);
       return;
     }
     let currentUserId = null;

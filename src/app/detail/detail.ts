@@ -1,5 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, RouterOutlet, Router } from '@angular/router';
 import { ProductItem } from '../shared/type/productItem';
 import { ProductService } from '../../services/ProductService';
 import { CartService } from '../../services/CartService';
@@ -34,7 +34,8 @@ export class Detail implements OnInit {
     private cartService: CartService,
     private localStorage: LocalStorageService,
     private CommentService: CommentService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -137,7 +138,7 @@ export class Detail implements OnInit {
       alert('Please log in to add items to your cart.');
       return;
     } else if (userData && JSON.parse(atob(userData)).role === 'admin') {
-      window.location.href = '/admin/manage-product';
+      this.router.navigate(['/admin/manage-product']);
       return;
     }
     const cartItem = {
