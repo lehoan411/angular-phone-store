@@ -14,7 +14,7 @@ import { ChangeDetectorRef } from '@angular/core';
 @Component({
   selector: 'manage-product-root',
   standalone: true,
-  imports: [ReactiveFormsModule, CurrencyPipe, UpperCasePipe, FormsModule,  CommonModule,  ],
+  imports: [ReactiveFormsModule, CurrencyPipe, UpperCasePipe, FormsModule, CommonModule,],
   templateUrl: './manage-product.component.html',
   styleUrls: ['./manage-product.component.css',]
 })
@@ -42,6 +42,7 @@ export class ManageProductComponent implements OnInit {
     price: '',
     image: ''
   };
+  productList: ProductItem[] = [];
 
   startInlineEdit(item: ProductItem) {
     this.editId = item.id;
@@ -64,39 +65,43 @@ export class ManageProductComponent implements OnInit {
     this.isOpen = false;
     this.product.reset();
   }
-  constructor(private localStorageService: LocalStorageService, 
+  constructor(private localStorageService: LocalStorageService,
     private productService: ProductService,
     private cd: ChangeDetectorRef) {
   }
 
   handleAddCart() {
     if (this.name?.hasError('required') || this.price?.hasError('required') || this.image?.hasError('required')) return;
+
     const userData = this.localStorageService.getItem('token');
     if (!userData) {
       alert('Please log in to create a product.');
       return;
     }
+
     const productItem: ProductItem = {
       id: Math.random().toString(),
       user: JSON.parse(atob(userData)).id,
       name: String(this.name?.value),
       price: Number(this.price?.value),
       image: [String(this.image?.value)]
-    }
-    if(productItem.price <= 0 || isNaN(productItem.price)) {
+    };
+
+    if (productItem.price <= 0 || isNaN(productItem.price)) {
       alert('Price must be a positive number.');
       return;
     }
+
     this.productService.postProduct(productItem).subscribe((res: any) => {
       if (res.id) {
-        this.closeModal()
+        this.productList.push(res);
+        this.closeModal();
         alert('Product created successfully!');
-        window.location.reload();
       }
     });
   }
 
-  productList: ProductItem[] = [];
+
 
 
   ngOnInit(): void {
@@ -141,14 +146,17 @@ export class ManageProductComponent implements OnInit {
   }
 
   handleDelete(id: string) {
-    if (confirm('Are you sure you want to delete this product?') == true) {
-      this.productService.deleteProduct(id).subscribe(() => {
-        this.productList = this.productList.filter(item => item.id !== id);
-        alert('Product deleted successfully!');
-        window.location.reload();
-      });
-    } else {
-      return;
-    }
+  if (confirm('Are you sure you want to delete this product?')) {
+
+    this.productService.deleteProduct(id).subscribe(() => {
+
+      this.productList = this.productList.filter(item => item.id !== id);
+
+      this.cd.detectChanges();
+
+      alert('Product deleted successfully!');
+    });
+
   }
+}
 }

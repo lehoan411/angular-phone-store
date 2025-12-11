@@ -14,6 +14,14 @@
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
 
+.infomation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e2e2e2;
+  padding-bottom: 1rem;
+}
+
 .header-cart {
   display: flex;
   padding: 1rem;

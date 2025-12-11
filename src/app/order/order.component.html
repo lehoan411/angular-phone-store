@@ -9,13 +9,18 @@
     @if (orderInfo) {
     <div class="group-cart" style="margin-bottom: 2rem;">
         <h2>Buyer Information</h2>
-
-        <div class="buyer-info">
-            <p><strong>Name:</strong> {{ buyer?.username }}</p>
-            <p><strong>Email:</strong> {{ buyer?.email }}</p>
-            <p><strong>Order Date:</strong> {{ orderInfo?.orderDate | date:'medium' }}</p>
-            <p><strong>Status:</strong> {{ orderInfo?.status }}</p>
+        <div class="infomation">
+            <div class="buyer-info">
+                <p><strong>Name:</strong> {{ buyer?.username }}</p>
+                <p><strong>Email:</strong> {{ buyer?.email }}</p>
+                <p><strong>Order Date:</strong> {{ orderInfo?.orderDate | date:'medium' }}</p>
+                <p><strong>Status:</strong> {{ orderInfo?.status }}</p>
+            </div>
+            <div class="buyer-avatar">
+                <img [src]="buyer?.avatar" alt="Buyer Avatar" width="200px" >
+            </div>
         </div>
+
     </div>
 
     <div class="group-cart">

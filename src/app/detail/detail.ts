@@ -10,7 +10,8 @@ import { CommonModule } from '@angular/common';
 import { CommentComponent } from '../shared/comment/comment.component';
 import { CommentService } from '../../services/CommentService';
 import { UserService } from '../../services/UserService';
-
+import { ChangeDetectorRef } from '@angular/core';
+import { forkJoin, map } from 'rxjs';
 @Component({
   selector: 'detail-root',
   standalone: true,
@@ -35,7 +36,8 @@ export class Detail implements OnInit {
     private localStorage: LocalStorageService,
     private CommentService: CommentService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private cd: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -47,7 +49,6 @@ export class Detail implements OnInit {
     this.id = this.route.snapshot.params['id'];
     this.loadProduct();
     this.loadComments();
-
   }
 
   selectedImageIndex = 0;
@@ -64,22 +65,28 @@ export class Detail implements OnInit {
 
   loadComments() {
     this.CommentService.getCommentsByProduct(this.id).subscribe(comments => {
-      this.commentViews = [];
 
-      comments.forEach((cmt: any) => {
-        this.userService.getUserById(cmt.user).subscribe(user => {
-          this.commentViews.push({
+      const requests = comments.map((cmt: any) =>
+        this.userService.getUserById(cmt.user).pipe(
+          map((user: any) => ({
             ...cmt,
             username: user.username,
-          });
-        });
+            avatar: user.avatar || ''
+          }))
+        )
+      );
+
+      forkJoin(requests).subscribe((result) => {
+        this.commentViews = result.sort(
+          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+        );
       });
     });
   }
 
+
   sendComment(content: string) {
     const token = this.localStorage.getItem("token");
-
     if (!token) {
       alert("Please log in to comment.");
       return;
@@ -87,30 +94,27 @@ export class Detail implements OnInit {
 
     const user = JSON.parse(atob(token));
 
-    const payload = {
+    const newComment = {
       id: String(Math.random()),
       user: user.id,
+      username: user.username,
+      avatar: user.avatar || '',
       product: this.id,
       content: content,
       date: new Date().toISOString()
     };
-
-    this.CommentService.addComment(payload).subscribe(() => {
-      this.loadComments();
-      window.location.reload();
-    });
+    this.commentViews.unshift(newComment);
+    this.CommentService.addComment(newComment).subscribe();
   }
 
 
   updateComment(data: { id: string, content: string }) {
-    const token = this.localStorage.getItem("token");
 
-    if (!token) {
-      alert("Please log in to comment.");
-      return;
-    }
+    const token = this.localStorage.getItem("token");
+    if (!token) return;
 
     const user = JSON.parse(atob(token));
+
     this.CommentService.editComment({
       id: data.id,
       user: user.id,
@@ -118,8 +122,15 @@ export class Detail implements OnInit {
       content: data.content,
       date: new Date().toISOString()
     }).subscribe(() => {
-      this.loadComments();
-      window.location.reload();
+      const index = this.commentViews.findIndex(c => c.id === data.id);
+      if (index !== -1) {
+        this.commentViews[index] = {
+          ...this.commentViews[index],
+          content: data.content,
+          date: new Date().toISOString()
+        };
+        this.cd.detectChanges();
+      }
     });
   }
 
@@ -127,8 +138,8 @@ export class Detail implements OnInit {
     if (!confirm("Delete this comment?")) return;
 
     this.CommentService.deleteComment(id).subscribe(() => {
-      this.loadComments();
-      window.location.reload();
+      this.commentViews = this.commentViews.filter(c => c.id !== id);
+      this.cd.detectChanges();
     });
   }
 

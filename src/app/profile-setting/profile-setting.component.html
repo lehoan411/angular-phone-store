@@ -11,7 +11,7 @@
 
     <div class="content">
 
-      @if (selectedTab === 'profile' && currentUser) {
+      @if (selectedTab === 'profile'|| !selectedTab && currentUser) {
 
       <div class="profile-card" [formGroup]="profileForm">
 

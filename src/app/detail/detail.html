@@ -23,8 +23,12 @@
     </div>
   </div>
   <div class="comment-block">
-    <app-comment [productId]="id" [currentUserId]="currentUserId" [commentViews]="commentViews"
-      (onSendComment)="sendComment($event)" (onUpdateComment)="updateComment($event)"
+    <app-comment 
+    [productId]="id" 
+    [currentUserId]="currentUserId" 
+    [commentViews]="commentViews"
+      (onSendComment)="sendComment($event)" 
+      (onUpdateComment)="updateComment($event)"
       (onDeleteComment)="deleteComment($event)">
     </app-comment>
   </div>

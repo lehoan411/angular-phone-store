@@ -39,7 +39,7 @@
         <!-- Avatar + Dropdown -->
         <div class="avatar-dropdown" (click)="toggleDropdown()" [class.open]="dropdownOpen">
 
-            <img class="avatar-img" [src]="avatarUrl"
+            <img class="avatar-img" [src]="avatarUrl || 'https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_960_720.png'"
                 alt="avatar">
             @if (dropdownOpen) {
             <div class="dropdown-menu">
